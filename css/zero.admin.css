@@ -1,0 +1,33 @@
+/*
+	@package zerotheme 
+*/
+
+.zero-general-form,
+.zero-sidebare-preview{
+	display: inline-block;
+	float: left;
+	
+}
+
+.zero-sidebare-preview{
+	width: 300px;
+	background-color: #1f1f1f;
+	padding: 20px;
+	text-align: center;
+	margin: 30px;
+	
+}
+
+.zero-general-form{
+	float: none;
+	margin-top: 20px;
+}
+h1.zero-username, h2.class-description{
+	color: #fff;
+}
+
+/*image */
+.image-container{
+	display: block; width: 100%; overflow: hidden; text-align: center;
+}
+.profile-picture{width: 122px; height: 122px; overflow: hidden; border-radius: 50%; margin: 20px auto;}
