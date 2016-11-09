@@ -9,25 +9,32 @@
 */
 
 function zero_theme_add_admin_page(){
+	
 	//Generate Zero Admin Page
 	add_menu_page( 'Zero Theme Options', 'Zero', 'manage_options', 'zero-theme', 'zero_theme_create_page', 'dashicons-format-gallery', 110 );
+	
 	//Generate Zero Admin Sub Page 
-	add_submenu_page( 'zero-theme', 'Zero Theme Options', 'General', 'manage_options', 'zero-theme', 'zero_theme_create_page' );
-	add_submenu_page( 'zero-theme', 'Zero Settings', 'Setting', 'manage_options', 'general', 'zero_theme_create_subpage_settings' );
+	add_submenu_page( 'zero-theme', 'Zero Sidebar Options', 'Sidebar', 'manage_options', 'zero-theme', 'zero_theme_create_page' );
+	add_submenu_page( 'zero-theme', 'Zero Theme Options', 'Theme Option', 'manage_options', 'zero-theme-option', 'zero_theme_support_subpage' );
+	//add_submenu_page( 'zero-theme', 'Zero Settings', 'Setting', 'manage_options', 'general', 'zero_theme_create_subpage_settings' );
 
 }
 
 add_action( 'admin_menu', 'zero_theme_add_admin_page' );
 
+//Template submenu function of Sidebare Options
 function zero_theme_create_page(){
-	//generation of uor admin pages
 	require_once( get_template_directory() . '/inc/tamplates/zero-admin.php');
-
 }
-function zero_theme_create_subpage_settings(){
-	//generation of uor admin sub pages
-	echo "<h1>Zero Setting Options </h1>";
 
+//Template submenu function of Supprot Theme Options
+function zero_theme_support_subpage(){
+	require_once( get_template_directory() . '/inc/tamplates/zero-theme-support.php');
+}
+
+//generation of uor admin sub pages
+function zero_theme_create_subpage_settings(){
+	echo "<h1>Zero Setting Options </h1>";
 }
 
 // Activation custom setting (Fill page Setting)
@@ -35,7 +42,7 @@ add_action('admin_init', 'zero_theme_custom_settings' );
 
 
 function zero_theme_custom_settings(){
-	
+	//Sidebar Option	
 		//Функция также может использоваться для регистрации новой опции, которая будет добавлена на базовую страницу настроек WordPress 
  		register_setting( 'zero-setting-group', 'profile_picture');
  		register_setting( 'zero-setting-group', 'first_name');
@@ -54,12 +61,44 @@ function zero_theme_custom_settings(){
  		add_settings_field( 'sidebare-twitter', 'Twitter', 'zero_sidebare_twitter', 'zero-theme', 'zero-sidebar-options' );
  		add_settings_field( 'sidebare-vk', 'Vk', 'zero_sidebare_vk', 'zero-theme', 'zero-sidebar-options' );
 
+ 	//Support Theme Options
+ 		register_setting( 'zero-theme-support-group', 'post_formats', 'zero_post_formats_callback' );
+
+ 		add_settings_section( 'zero-theme-option-id', 'Theme Options', 'zero_theme_options_fun', 'zero-theme-option' );
+
+ 		add_settings_field( 'post_formats-id', 'Post Formats', 'zero_post_formats' , 'zero-theme-option' , 'zero-theme-option-id');
+
 }
 
-function zero_sidebare_options(){
-	echo "Customer information";
-}
+/*
+					Supprot Theme Opstions	
+	===================================================
+*/
+	//Post Formats Callback Function
+	function zero_post_formats_callback( $input ){
+		return $input;
+	}
 
+	function zero_theme_options_fun(){
+		echo "Activate and Deactivate specific Theme Suppor Option";
+	}
+
+	function zero_post_formats(){
+		$options= get_option('post_formats');
+		var_dump($options ); echo "<br>";
+		$formats = array('aside','gallery', 'image', 'video', 'quote', 'audio', 'chat' , 'link' );
+		$output = '';
+		foreach ($formats as $format ) {
+			$checked = ( @$options[$format] == 1 ? 'checked' : ''); 
+			$output .= '<label><input type = "checkbox" id="'.$format.'" name="post_formats['.$format.']" value="1"'.$checked.'/>'.$format.'</label><br>';
+		}
+		echo $output;
+	}
+
+/*
+					Sidebar Option	
+	===================================================
+*/
 
 function zero_sidebare_profile_pictures(){
 	$picture= esc_attr(get_option('profile_picture'));
@@ -97,12 +136,12 @@ function zero_sidebare_twitter(){
 	echo '<p><input type="text" name="twitter" value="'.$twitter.'" placeholder="twitter link"/></p>
 	    <p class = "description">Input your Twitter username without the @ character </p>';
 }
+
 //Sanitization settings
 function zero_sanitize_twitter( $input ){
 	$output = sanitize_text_field( $input );
 	$output = str_replace('@', '' , $output);
 	return $output;
 }
-
 
  ?>

@@ -1,5 +1,6 @@
 
-  <h1>Zero Sidebar Option </h1> 	
+<h1>Zero Sidebar Option </h1>
+
 <?php 
 	//в адмін панелі показує повідомлення про успіжне виконання форми
 	settings_errors(); 
