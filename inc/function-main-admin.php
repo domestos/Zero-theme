@@ -40,7 +40,8 @@ function vp_zero_add_admin_pages(){
 	
 	/*			MAIN SUB ADMIN PAGES
 	 =========================================================*/
-	add_submenu_page( 'zero-main-page' , 'Main Sidebare of Zero Theme', 'Post Settings', 'manage_options', 'zero-setting-post', 'vp_zero_create_sidebare_page' );
+	add_submenu_page( 'zero-main-page' , 'Main Sidebare of Zero Theme', 'Post Settings', 'manage_options', 'zero-setting-post', 'vp_zero_create_setting_post' );
+	add_submenu_page( 'zero-main-page' , 'My Contact Form', 'Contact Form', 'manage_options', 'zero-contact-form', 'vp_zero_create_contact_form' );
 }
 
 
@@ -48,12 +49,15 @@ function vp_zero_add_admin_pages(){
 /*	  VIEW PAGES of ZERO ADMIN MENU
 =========================================================*/
 function vp_zero_create_main_admin_page(){
-	require_once( get_template_directory() . '/inc/tamplates/main-admin-page.php');
+	require_once( get_template_directory() . '/inc/tamplates/zero-main-admin-page.php');
 }
 
- function vp_zero_create_sidebare_page(){
- 	require_once( get_template_directory() . '/inc/tamplates/setting-post.php');
- 	
+ function vp_zero_create_setting_post(){
+ 	require_once( get_template_directory() . '/inc/tamplates/zero-setting-post.php');
+}
+
+function vp_zero_create_contact_form(){
+	require_once( get_template_directory() . '/inc/tamplates/zero-contact-form.php');
 }
 
 
@@ -97,22 +101,53 @@ function vp_zero_custom_main_page(){
  	add_settings_field( 'custom-header-settings-field', 'Custom Header', 'vp_zero_get_custom_header' , 'zero-setting-post' , 'zero-setting-post-section');
  	add_settings_field( 'custom-background-settings-field', 'Custom Background', 'vp_zero_get_custom_background' , 'zero-setting-post' , 'zero-setting-post-section');
 
+/*==================================================== CONTACT FORM =================================================================*/	
+	register_setting('zero-contact-options-group' , 'activate_contact_form');
+
+	add_settings_section( 'zero-contact-form-section', 'Contact Form', 'vp_zero_contact_form_section', 'zero-contact-form');
+
+	add_settings_field( 'activate-contact-form', 'Activete contact form', 'vp_zero_get_contact_form', 'zero-contact-form', 'zero-contact-form-section' );
 
 } // end function vp_zero_custom_main_page
+
+/*==================================================== FUNCTIONS CONTACT FORM =================================================================*/	
+function vp_zero_contact_form_section(){
+	echo "Activate and Deactivate the Built-in Contact-Form";
+}
+
+function vp_zero_get_contact_form(){
+	$options= get_option('activate_contact_form');
+	$checked = ( @$options == 1 ? 'checked' : ''); 
+	echo '<label><input type = "checkbox" id="activate_contact_form" name="activate_contact_form" value="1"'.$checked.'/></label><br>';
+}
+
 /*==================================================== FUNCTIONS SETTING POST  =================================================================*/	
 function vp_zero_setting_post_section(){
-	echo "this function vp_zero_setting_post_section";
+	echo "Activate and Deactivate specific Theme Suppor Option";
 }
 
 function vp_zero_get_format_post(){
-	echo "THIS function vp_zero_get_format_post";
+	$options= get_option('post_formats');
+	//var_dump($options ); echo "<br>";
+	$formats = array('aside','gallery', 'image', 'video', 'quote', 'audio', 'chat' , 'link' );
+	$output = '';
+	foreach ($formats as $format ) {
+		$checked = ( @$options[$format] == 1 ? 'checked' : ''); 
+		$output .= '<label><input type = "checkbox" id="'.$format.'" name="post_formats['.$format.']" value="1"'.$checked.'/>'.$format.'</label><br>';
+	}
+	echo $output;
 }
 
 function vp_zero_get_custom_header(){
-	echo "THIS vp_zero_get_custom_header";
+	$options= get_option('custom_header');
+	$checked = ( @$options == 1 ? 'checked' : ''); 
+	echo '<label><input type = "checkbox" id="custom_header" name="custom_header" value="1"'.$checked.'/>Activet custom header</label><br>';
 }
+
 function vp_zero_get_custom_background(){
-	echo "THIS vp_zero_get_custom_background";
+	$options= get_option('custom_background');
+	$checked = ( @$options == 1 ? 'checked' : ''); 
+	echo '<label><input type = "checkbox" id="custom_background" name="custom_background" value="1"'.$checked.'/>Activet custom background</label><br>';
 }
 /*==================================================== FUNCTIONS MY PROFILE =================================================================*/	
 function vp_zero_main_setting_section(){
@@ -174,5 +209,6 @@ function zero_sanitize_twitter($input){
 	$output = str_replace('@', '' , $output);
 	return $output;
 }
+
 
 ?>

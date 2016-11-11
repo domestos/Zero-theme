@@ -5,7 +5,6 @@
 
 	require  get_template_directory(). '/inc/function-setting-post.php';
 
-
-	//require  get_template_directory(). '/inc/theme-support.php';
+	require  get_template_directory(). '/inc/function-custom-type.php';
 
 ?>
