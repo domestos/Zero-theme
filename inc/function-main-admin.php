@@ -42,6 +42,7 @@ function vp_zero_add_admin_pages(){
 	 =========================================================*/
 	add_submenu_page( 'zero-main-page' , 'Main Sidebare of Zero Theme', 'Post Settings', 'manage_options', 'zero-setting-post', 'vp_zero_create_setting_post' );
 	add_submenu_page( 'zero-main-page' , 'My Contact Form', 'Contact Form', 'manage_options', 'zero-contact-form', 'vp_zero_create_contact_form' );
+	add_submenu_page( 'zero-main-page' , 'Zero Theme Custom CSS', 'Contact CSS', 'manage_options', 'zero-custom-css', 'vp_zero_create_custom_css' );
 }
 
 
@@ -58,6 +59,10 @@ function vp_zero_create_main_admin_page(){
 
 function vp_zero_create_contact_form(){
 	require_once( get_template_directory() . '/inc/tamplates/zero-contact-form.php');
+}
+
+function vp_zero_create_custom_css(){
+	require_once( get_template_directory() . '/inc/tamplates/zero-custom-css.php');
 }
 
 
@@ -106,9 +111,32 @@ function vp_zero_custom_main_page(){
 
 	add_settings_section( 'zero-contact-form-section', 'Contact Form', 'vp_zero_contact_form_section', 'zero-contact-form');
 
-	add_settings_field( 'activate-contact-form', 'Activete contact form', 'vp_zero_get_contact_form', 'zero-contact-form', 'zero-contact-form-section' );
+	add_settings_field( 'activate-contact-form-field', 'Activete contact form', 'vp_zero_get_contact_form', 'zero-contact-form', 'zero-contact-form-section' );
+
+/*==================================================== CUSTOM CSS OPTIONS =================================================================*/	
+	register_setting('zero-custom-css-group' , 'custom_css');
+
+	add_settings_section( 'zero-custom-css-section', 'Custom CSS', 'vp_zero_custom_css_section_callback', 'zero-custom-css');
+
+	add_settings_field( 'azero-custom-css-field', 'Insert your Custom CSS', 'vp_zero_get_custom_css_field_callback', 'zero-custom-css', 'zero-custom-css-section' );
 
 } // end function vp_zero_custom_main_page
+
+
+
+
+/*==================================================== FUNCTIONS CUSTOM CSS =================================================================*/	
+function vp_zero_custom_css_section_callback(){
+	echo "Customize Zero Theme with your own CSS";
+}
+
+function vp_zero_get_custom_css_field_callback(){
+	$css= get_option('custom_css');
+	$css = (empty($css) ? ' /* Zero Theme Custom CSS*/ ' : $css); 
+	
+	echo '<textarea>'.$css.'</textarea>';
+}
+
 
 /*==================================================== FUNCTIONS CONTACT FORM =================================================================*/	
 function vp_zero_contact_form_section(){

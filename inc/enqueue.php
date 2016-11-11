@@ -9,7 +9,7 @@
 */
 
 function zero_load_admin_scripts($hook){
-
+	var_dump($hook);
 	wp_register_style( 'zero-admin-css', get_template_directory_uri() . '/css/zero.admin.css', array(), '1.0.0', 'all' );
 	wp_enqueue_style('zero-admin-css');
 
